@@ -8,6 +8,11 @@ body {
     color: #f8fafc;
 }
 
+.text-secondary, 
+.text-muted {
+    color: #cbd5e1 !important;
+}
+
 .navbar {
     background-color: rgba(15, 23, 42, 0.9) !important;
     backdrop-filter: blur(10px);
@@ -90,4 +95,38 @@ footer h6 {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 0.85rem;
+}
+
+.filter-sidebar {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    position: sticky;
+    top: 100px;
+}
+
+.accordion-item {
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.accordion-button {
+    font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+    color: var(--accent-blue);
+    box-shadow: none;
+}
+
+.accordion-button::after {
+    filter: invert(1);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.form-check-label {
+    color: #e2e8f0 !important;
 }
