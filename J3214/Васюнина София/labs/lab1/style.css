@@ -1,16 +1,13 @@
 :root {
     --bg-dark: #0f172a;
+    --accent-blue: #58A6FF;
+    --text-muted: #E6EDF3;
 }
 
 body {
     padding-top: 80px;
     background-color: var(--bg-dark); 
     color: #f8fafc;
-}
-
-.text-secondary, 
-.text-muted {
-    color: #cbd5e1 !important;
 }
 
 .navbar {
@@ -39,9 +36,16 @@ body {
 }
 
 .badge-ai {
-    background-color: rgba(56, 189, 248, 0.1);
-    color: var(--accent-blue);
-    border: 1px solid rgba(56, 189, 248, 0.2);
+    background-color: var(--accent-blue);
+    color: var(--bg-dark) !important;
+    border: none;
+    font-weight: 700;
+}
+
+.badge.bg-dark-subtle {
+    background-color: #e2e8f0 !important;
+    color: var(--bg-dark) !important;
+    border: none !important;
     font-weight: 600;
 }
 
@@ -129,4 +133,54 @@ footer h6 {
 
 .form-check-label {
     color: #e2e8f0 !important;
+}
+
+.form-control {
+    color: #f8fafc !important; 
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+    opacity: 1; 
+}
+
+.form-select:focus {
+    background-color: transparent !important;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
+    color: white;
+}
+
+.pagination .page-link {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
+.pagination .page-link:hover {
+    background-color: var(--card-bg);
+    color: var(--accent-blue);
+}
+
+.pagination .active .page-link {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: var(--bg-dark);
+    font-weight: bold;
+}
+
+.pagination .disabled .page-link {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+.card-title {
+    color: #f8fafc;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.card:hover .card-title {
+    color: var(--accent-blue);
 }
