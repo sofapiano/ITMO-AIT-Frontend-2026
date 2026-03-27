@@ -45,6 +45,95 @@
         </nav>
     </header>
 
+    <main class="container my-5">
+    <div class="row align-items-center mb-5 bg-dark p-4 rounded-4 border border-secondary shadow-sm profile-card">
+        <div class="col-md-8 d-flex align-items-center gap-4">
+            <div class="avatar-lg bg-primary fs-1 shadow">
+                A
+            </div>
+            <div>
+                <h1 class="h3 fw-bold mb-1">Alex Developer</h1>
+                <p class="text-white-50 mb-2">@alex_dev • Joined March 2026</p>
+                <div class="d-flex gap-2">
+                    <span class="badge bg-dark-subtle text-light border border-secondary">Web Dev</span>
+                    <span class="badge bg-dark-subtle text-light border border-secondary">Student</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex flex-column flex-md-row justify-content-md-end gap-2">
+            <button class="btn btn-outline-light">Edit Profile</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                + New Model
+            </button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs border-secondary mb-4" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active bg-transparent text-white border-0 border-bottom border-3 border-info" id="models-tab" data-bs-toggle="tab" data-bs-target="#models" type="button">My Models (1)</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link bg-transparent text-secondary border-0" id="likes-tab" data-bs-toggle="tab" data-bs-target="#likes" type="button">Liked (12)</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="profileTabContent">
+        <div class="tab-pane fade show active" id="models" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4 text-center py-5 border border-secondary rounded-3 border-dashed">
+                    <p class="text-white-50 mb-0">You haven't uploaded any other models yet.</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="likes" role="tabpanel">
+            <p class="text-secondary">Models you liked will appear here.</p>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold" id="uploadModalLabel">Upload New Model</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="modelName" class="form-label text-white-50 small">Model Name</label>
+                        <input type="text" class="form-control bg-dark border-secondary" id="modelName" placeholder="e.g. text-generator-v1">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="taskType" class="form-label text-white-50 small">Primary Task</label>
+                        <select class="form-select bg-dark border-secondary text-white" id="taskType">
+                            <option selected>Choose...</option>
+                            <option value="1">Computer Vision</option>
+                            <option value="2">Natural Language Processing</option>
+                            <option value="3">Audio</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modelFile" class="form-label text-white-50 small">Upload Weights (.bin, .pt, .h5)</label>
+                        <input class="form-control bg-dark border-secondary" type="file" id="modelFile">
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Create Model</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
     <footer class="py-5 mt-5 border-top border-secondary">
     <div class="container">
         <div class="row">
