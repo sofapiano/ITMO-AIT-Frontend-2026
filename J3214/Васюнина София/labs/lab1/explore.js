@@ -1,10 +1,11 @@
-let allModels = []; 
+let allModels = [];
+let filteredModels = [];
 const itemsPerPage = 6;
 let currentPage = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchModels();
-    setupPagination();
+    setupSidebarFilters();
 });
 
 // get data wuth async func
@@ -12,112 +13,185 @@ async function fetchModels() {
     const spinner = document.getElementById('loading-spinner');
 
     try {
-        const response = await fetch('https://huggingface.co/api/models?sort=downloads&direction=-1&limit=18');
+        const response = await fetch('https://huggingface.co/api/models?sort=downloads&direction=-1&limit=60');
 
         if(!response.ok){
             throw new Error(`HTTP error >:( status: ${response.status}`);
         }
         
         allModels = await response.json();
+        filteredModels = [...allModels];
+
         spinner.style.display = 'none';
+
+        
+        setupTagFilter();
         renderPage(1);
     } catch (error) {
         console.error('error while loading models:', error);
-        spinner.innerHTML = `<p class="text-danger">Failed to load models. Please try again later.</p>`;
+        const container = document.getElementById('models-container');
+        if (container) {
+            container.innerHTML = `<div class="col-12 text-center py-5 text-danger">Не удалось загрузить модели. Проверьте консоль F12.</div>`;
+        }
     }
+}
+
+// setting filters
+function setupSidebarFilters() {
+    const checkboxes = document.querySelectorAll('.filter-sidebar input[type="checkbox"]');
+    const resetBtn = document.querySelector('.filter-sidebar .btn-outline-info');
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', applyFilters);
+    });
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            checkboxes.forEach(cb => cb.checked = false);
+            const tagFilter = document.getElementById('tag-filter');
+            if (tagFilter) tagFilter.value = 'all';
+            applyFilters();
+        });
+    }
+}
+
+function setupTagFilter() {
+    const filterSelect = document.getElementById('tag-filter');
+    if (!filterSelect) return;
+
+    const tags = new Set();
+    allModels.forEach(model => {
+        if (model.pipeline_tag) {
+            tags.add(model.pipeline_tag);
+        }
+    });
+
+    tags.forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag;
+        option.textContent = tag.replace(/-/g, ' ');
+        option.classList.add('text-dark');
+        filterSelect.appendChild(option);
+    });
+    
+    filterSelect.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+    const nlp = document.getElementById('nlp')?.checked;
+    const cv = document.getElementById('cv')?.checked;
+    const audio = document.getElementById('audio')?.checked;
+    const dropdownTag = document.getElementById('tag-filter')?.value;
+
+    const nlpTags = ['text-generation', 'text-classification', 'token-classification', 'translation', 'summarization', 'question-answering', 'fill-mask', 'conversational'];
+    const cvTags = ['image-classification', 'image-segmentation', 'object-detection', 'image-to-image', 'text-to-image', 'depth-estimation'];
+    const audioTags = ['automatic-speech-recognition', 'audio-classification', 'text-to-speech', 'text-to-audio'];
+
+    let activeCategoryTags = [];
+    if (nlp) activeCategoryTags.push(...nlpTags);
+    if (cv) activeCategoryTags.push(...cvTags);
+    if (audio) activeCategoryTags.push(...audioTags);
+
+    filteredModels = allModels.filter(model => {
+        const matchesCategory = activeCategoryTags.length === 0 || activeCategoryTags.includes(model.pipeline_tag);
+        const matchesDropdown = !dropdownTag || dropdownTag === 'all' || model.pipeline_tag === dropdownTag;
+
+        return matchesCategory && matchesDropdown;
+    });
+
+    renderPage(1);
 }
 
 // html rendering
 function renderPage(page) {
     currentPage = page;
     const container = document.getElementById('models-container');
-    container.innerHTML = '';
 
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const modelsToRender = allModels.slice(start, end);
+    const modelsToRender = filteredModels.slice(start, end);
+
+    if (modelsToRender.length === 0) {
+        container.innerHTML = `<div class="col-12 text-center py-5 text-white-50">No models found matching your filters.</div>`;
+        updatePaginationUI();
+        return;
+    }
+
+    let cardsHTML = '';
 
     modelsToRender.forEach(model => {
-        const modelName = model.id.split('/').pop();
+        const modelId = model.id || 'unknown/model';
+        const modelName = modelId.split('/').pop();
         const author = model.author || 'Community';
         const task = model.pipeline_tag || 'Generic Model';
-        
         let downloads = model.downloads || 0;
-        if (downloads > 1000) downloads = (downloads / 1000).toFixed(1) + 'k';
-
-        const avatarLetter = author.charAt(0).toUpperCase();
-
-        const article = document.createElement('article');
-        article.className = 'col-12 col-md-6';
-        article.style.cursor = 'pointer';
+        if (downloads >= 1000) {
+            downloads = (downloads / 1000).toFixed(1) + 'k';
+        }
         
-        article.innerHTML = `
-            <div class="card h-100 shadow-sm p-3">
-                <div class="d-flex align-items-center mb-2">
-                    <div class="avatar-sm me-2 bg-secondary text-white d-flex align-items-center justify-content-center rounded">
-                        ${author.charAt(0).toUpperCase()}
+        cardsHTML += `
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 bg-transparent border-secondary text-white" style="background-color: var(--card-bg) !important;">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">${modelName}</h5>
+                        <p class="card-text small text-muted">Author: ${author}</p>
+                        <span class="badge bg-secondary mb-3">${task}</span>
+                        <p class="card-text">⭐ ${downloads} downloads</p>
+                        <button onclick="viewDetails('${modelId}')" class="btn btn-outline-info btn-sm">View Details</button>
                     </div>
-                    <span class="text-secondary small">${author}</span>
-                </div>
-                <h5 class="card-title mb-1 text-truncate">${modelName}</h5>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-light text-dark border">${model.pipeline_tag || 'AI'}</span>
-                    <span class="text-secondary small">⭐ ${model.downloads || 0}</span>
                 </div>
             </div>
         `;
-
-        article.addEventListener('click', () => {
-            localStorage.setItem('selectedModel', JSON.stringify(model));
-            window.location.href = 'item-card.html';
-        });
-
-        container.appendChild(article);
-
     });
 
+    container.innerHTML = cardsHTML;
     updatePaginationUI();
 }
 
-// pages clicker
-function setupPagination() {
-    const pagination = document.querySelector('.pagination');
-    if (!pagination) return;
-    
-    pagination.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        const target = e.target;
-        if (!target.classList.contains('page-link')) return;
+window.viewDetails = function(modelId) {
+    const model = allModels.find(m => m.id === modelId);
+    if (model) {
+        localStorage.setItem('selectedModel', JSON.stringify(model));
+        window.location.href = 'item-card.html';
+    }
+};
 
-        const text = target.innerText;
-        const maxPage = Math.ceil(allModels.length / itemsPerPage);
-
-        if (text === 'Previous') {
-            if (currentPage > 1) renderPage(currentPage - 1);
-        } else if (text === 'Next') {
-            if (currentPage < maxPage) renderPage(currentPage + 1);
-        } else {
-            const pageNum = parseInt(text);
-            if (!isNaN(pageNum)) renderPage(pageNum);
-        }
-    });
-}
+window.changePage = function(page) {
+    const maxPage = Math.ceil(filteredModels.length / itemsPerPage);
+    if (page >= 1 && page <= maxPage) {
+        renderPage(page);
+    }
+};
 
 function updatePaginationUI() {
-    const paginationItems = document.querySelectorAll('.pagination .page-item');
-    if (paginationItems.length === 0) return;
+    const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) return;
 
-    const maxPage = Math.ceil(allModels.length / itemsPerPage);
+    const maxPage = Math.ceil(filteredModels.length / itemsPerPage) || 1;
 
-    if (currentPage === 1) paginationItems[0].classList.add('disabled');
-    else paginationItems[0].classList.remove('disabled');
+    let paginationHTML = `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link bg-transparent text-white border-secondary" href="#" onclick="changePage(${currentPage - 1}); return false;">Previous</a>
+        </li>
+    `;
 
-    for (let i = 1; i <= 3; i++) {
-        if (i === currentPage) paginationItems[i].classList.add('active');
-        else paginationItems[i].classList.remove('active');
+    for (let i = 1; i <= maxPage; i++) {
+        if (i === 1 || i === maxPage || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            paginationHTML += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link bg-transparent text-white border-secondary" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                </li>
+            `;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+            paginationHTML += `<li class="page-item disabled"><span class="page-link bg-transparent text-white border-secondary">...</span></li>`;
+        }
     }
 
-    if (currentPage === maxPage) paginationItems[4].classList.add('disabled');
-    else paginationItems[4].classList.remove('disabled');
+    paginationHTML += `
+        <li class="page-item ${currentPage === maxPage ? 'disabled' : ''}">
+            <a class="page-link bg-transparent text-white border-secondary" href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>
+        </li>
+    `;
+
+    paginationContainer.innerHTML = paginationHTML;
 }
