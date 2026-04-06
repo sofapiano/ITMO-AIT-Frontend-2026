@@ -6,6 +6,7 @@ let currentPage = 1;
 document.addEventListener('DOMContentLoaded', () => {
     fetchModels();
     setupSidebarFilters();
+    setupSearch();
 });
 
 // get data wuth async func
@@ -194,4 +195,41 @@ function updatePaginationUI() {
     `;
 
     paginationContainer.innerHTML = paginationHTML;
+}
+
+// search setup
+function setupSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+
+    const performSearch = () => {
+        const query = searchInput.value.toLowerCase().trim();
+
+        if (query == "") {
+            filteredModels = [...allModels];
+        } else {
+            filteredModels = allModels.filter(model => {
+                const name = (model.id || "").toLowerCase();
+                const author = (model.author || "").toLowerCase();
+                const description = (model.pipeline_tag || "").toLowerCase();
+                const tags = (model.tags || []).join(" ").toLowerCase();
+
+                return name.includes(query) || 
+                       author.includes(query) || 
+                       description.includes(query) || 
+                       tags.includes(query);
+            });
+        }
+
+        currentPage = 1;
+        renderPage(1);
+    }
+
+    searchBtn.addEventListener('click', performSearch);
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
 }
