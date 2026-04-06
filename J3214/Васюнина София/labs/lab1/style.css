@@ -64,12 +64,6 @@ body {
     cursor: pointer;
 }
 
-.card:hover {
-    transform: translateY(-10px);
-    border-color: var(--accent-blue);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
-}
-
 .text-truncate-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
