@@ -125,6 +125,7 @@ function renderPage(page) {
         const modelName = modelId.split('/').pop();
         const author = model.author || 'Community';
         const task = model.pipeline_tag || 'Generic Model';
+        const isLiked = (JSON.parse(localStorage.getItem('likedModels')) || []).some(m => m.id === model.id);
         let downloads = model.downloads || 0;
         if (downloads >= 1000) {
             downloads = (downloads / 1000).toFixed(1) + 'k';
@@ -139,6 +140,10 @@ function renderPage(page) {
                         <span class="badge bg-secondary mb-3">${task}</span>
                         <p class="card-text">⭐ ${downloads} downloads</p>
                         <button onclick="viewDetails('${modelId}')" class="btn btn-outline-info btn-sm">View Details</button>
+                        <button class="btn btn-sm ${isLiked ? 'btn-danger' : 'btn-outline-danger'}" 
+                                onclick="toggleLike('${model.id.replace(/'/g, "\\'")}')">
+                            ${isLiked ? '❤️' : '🤍'}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -162,6 +167,21 @@ window.changePage = function(page) {
     if (page >= 1 && page <= maxPage) {
         renderPage(page);
     }
+};
+
+window.toggleLike = function(modelId) {
+    const model = allModels.find(m => m.id === modelId);
+    let liked = JSON.parse(localStorage.getItem('likedModels')) || [];
+    
+    const index = liked.findIndex(m => m.id === modelId);
+    if (index > -1) {
+        liked.splice(index, 1);
+    } else {
+        liked.push(model);
+    }
+    
+    localStorage.setItem('likedModels', JSON.stringify(liked));
+    renderPage(currentPage);
 };
 
 function updatePaginationUI() {
