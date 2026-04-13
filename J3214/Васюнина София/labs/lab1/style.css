@@ -4,7 +4,7 @@
     --bg-dark: #0f172a;
     --accent-blue: #58A6FF;
     --text-muted: #E6EDF3;
-    --card-bg: #345F95;
+    --card-bg: #58A6FF;
 }
 
 body {
@@ -173,7 +173,7 @@ footer h6 {
 .pagination .disabled .page-link {
     background-color: transparent;
     border-color: var(--border-color);
-    color: var(--text-muted);
+    color: var(--я);
 }
 
 .card-title {
