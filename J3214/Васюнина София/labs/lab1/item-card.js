@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let downloads = model.downloads || 0;
     if (downloads > 1000) downloads = (downloads / 1000).toFixed(1) + 'k';
-    document.getElementById('model-downloads').textContent = `⭐ ${downloads} downloads`;
+    document.getElementById('model-downloads').textContent = `<svg class="svg-icon star-filled"><use href="#icon-star"></use></svg> ${downloads} downloads`;
 
     document.getElementById('model-description').textContent = 
         `${model.id} - это современная модель машинного обучения, загруженная из Hugging Face Hub. Теги: ${model.tags?.slice(0, 5).join(', ') || 'AI'}.`;

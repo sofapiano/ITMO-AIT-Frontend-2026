@@ -226,6 +226,12 @@ footer h6 {
     transition: color 0.2s ease;
 }
 
+.card-text {
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
 .card:hover .card-title {
     color: var(--accent-blue);
 }
@@ -297,4 +303,22 @@ input[type="file"]::file-selector-button:hover {
 
 .profile-card {
     background-color: var(--card-bg) !important;
+}
+
+/* Бsvg sprites */
+.svg-icon {
+    width: 1.2em;
+    height: 1.2em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.svg-icon.star-filled {
+    fill: #fbbf24;
+    stroke: #fbbf24;
 }

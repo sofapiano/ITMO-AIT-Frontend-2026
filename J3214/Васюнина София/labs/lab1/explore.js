@@ -135,11 +135,11 @@ function renderPage(page) {
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 bg-transparent border-secondary text-white" style="background-color: var(--card-bg) !important;">
                     <div class="card-body">
-                        <h5 class="card-title text-info">${modelName}</h5>
+                        <h5 class="card-title">${modelName}</h5>
                         <p class="card-text small text-muted">Author: ${author}</p>
                         <span class="badge bg-secondary mb-3">${task}</span>
                         <p class="card-text">⭐ ${downloads} downloads</p>
-                        <button onclick="viewDetails('${modelId}')" class="btn btn-outline-info btn-sm">View Details</button>
+                        <button onclick="viewDetails('${modelId}')" class="btn btn-outline-dark btn-sm">View Details</button>
                         <button class="btn btn-sm ${isLiked ? 'btn-danger' : 'btn-outline-danger'}" 
                                 onclick="toggleLike('${model.id.replace(/'/g, "\\'")}')">
                             ${isLiked ? '❤️' : '🤍'}
