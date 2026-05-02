@@ -1,9 +1,9 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top border-bottom border-secondary">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
+            <router-link class="navbar-brand" to="/">
             AI <span class="text-info">HUB</span>
-            </a>
+            </router-link>
 
             <div class="d-flex align-items-center">
                 <template v-if="!authStore.isLoggedIn">
@@ -17,7 +17,7 @@
 
                 <template v-else>
                 <span class="text-muted me-3">{{ authStore.userName }}</span>
-                <a href="/profile.html" class="btn btn-outline-secondary me-2">Профиль</a>
+                <router-link to="/profile" class="btn btn-outline-secondary me-2">Профиль</router-link>
                 <button @click="authStore.logout" class="btn btn-sm btn-link text-danger">Выйти</button>
                 </template>
             </div>
@@ -29,18 +29,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/explore">Models</a>
+                    <router-link class="nav-link" to="/explore">Models</router-link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Datasets</a>
+                    <router-link class="nav-link" to="/explore">Datasets</router-link>
                 </li>
                 </ul>
                 
                 <div class="d-flex align-items-center gap-3">
-                <button class="btn btn-outline-light btn-sm" id="theme-toggle">
-                    🌓
-                </button>
-                <button class="btn btn-info btn-sm">Sign In</button>
+                    <button @click="toggleTheme" class="btn btn-outline-light btn-sm" id="theme-toggle">🌓</button>
+                    <button class="btn btn-info btn-sm">Sign In</button>
                 </div>
             </div>
         </div>
@@ -53,6 +51,8 @@
 import { useAuthStore } from '@/stores/auth';
 import LoginModal from './LoginModal.vue';
 import RegisterModal from './RegisterModal.vue';
+import { useTheme } from '@/composables/useTheme';
+const { toggleTheme } = useTheme();
 
 const authStore = useAuthStore();
 </script>

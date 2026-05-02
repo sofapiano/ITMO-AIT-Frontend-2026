@@ -1,10 +1,8 @@
 <script setup>
 import TheNavbar from './components/Navbar.vue'
-import TheHero from './components/Hero.vue'
 import TheFooter from './components/Footer.vue'
 import { onMounted } from 'vue'
 
-// Переносим логику темы из theme.js
 onMounted(() => {
   const currentTheme = localStorage.getItem('theme') || 'dark'
   document.documentElement.setAttribute('data-theme', currentTheme)
@@ -16,14 +14,9 @@ onMounted(() => {
     <TheNavbar />
     
     <main>
-      <TheHero />
-      </main>
+      <router-view />
+    </main>
 
     <TheFooter />
   </div>
 </template>
-
-<style>
-/* Здесь можно импортировать ваш style.css */
-@import "./assets/style.css";
-</style>

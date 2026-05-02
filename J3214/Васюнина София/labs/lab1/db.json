@@ -13,6 +13,20 @@
       "firstName": "sonya",
       "lastName": "vasyunina",
       "id": 2
+    },
+    {
+      "email": "mamama@mail.ru",
+      "password": "$2a$10$8mxvObLtgmE3BO7WH6lAtusd7wmGyyd.Z4x9sTR3qzz1Ln2ISyTd2",
+      "firstName": "Sofia",
+      "lastName": "Vasiunina",
+      "id": 3
+    },
+    {
+      "email": "mumumu@mail.ru",
+      "password": "$2a$10$SSe9saUWvnOlizvEQEf5Z.FRA.KFwZCoi6VQ0eeOWDZFe0g9/xVo2",
+      "firstName": "Sofia",
+      "lastName": "Vasiunina",
+      "id": 4
     }
   ],
   "notes": [

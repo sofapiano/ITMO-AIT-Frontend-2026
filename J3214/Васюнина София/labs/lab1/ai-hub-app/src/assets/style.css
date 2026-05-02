@@ -1,6 +1,7 @@
 /* main things */
 
 :root {
+    --border-color: rgba(255, 255, 255, 0.1);
     --bg-dark: #0f172a;
     --accent-blue: #58A6FF;
     --text-muted: #E6EDF3;
@@ -10,6 +11,7 @@
 }
 
 :root[data-theme="light"] {
+    --border-color: rgba(0, 0, 0, 0.1);
     --bg-dark: #f4f6f8;
     --accent-blue: #0256d4;
     --text-muted: #1f2937;
