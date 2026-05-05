@@ -84,7 +84,7 @@ onMounted(() => {
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3 class="fw-bold" :class="textClass">Trending Models</h3>
+          <h3 class="fw-bold">Trending Models</h3>
           
           <select 
             v-model="selectedTag" 
